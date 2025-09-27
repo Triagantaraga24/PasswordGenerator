@@ -16,7 +16,7 @@ body {
 /* ===== INTERACTION FIX ===== */
 input, button, textarea, select {
     pointer-events: auto !important;
-    font-family: inherit;
+    font-family: inherit !important;
 }
 
 input, button {
