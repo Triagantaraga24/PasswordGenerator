@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Password</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-key"></i> Generator Password</h1>
+            <p>Buat password aman dengan kemudahan penuh</p>
+            <p><code>-Raga Triagantara-</code></p>
+        </header>
+
+        <main class="main-content">
+            <div class="glass-card settings-card">
+                <h2><i class="fas fa-cog"></i> Pengaturan Password</h2>
+
+                <div class="form-group">
+                    <label for="passwordCount">
+                        <i class="fas fa-list-ol"></i> Jumlah Password
+                    </label>
+                    <input type="number" id="passwordCount" min="1" max="50" value="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="maxLength">
+                        <i class="fas fa-ruler-horizontal"></i> Maksimal Karakter
+                    </label>
+                    <input type="number" id="maxLength" min="4" max="50" value="12">
+                </div>
+
+                <div class="character-types">
+                    <h3><i class="fas fa-font"></i> Komposisi Karakter</h3>
+
+                    <div class="form-group">
+                        <label for="symbolCount">
+                            <i class="fas fa-hashtag"></i> Jumlah Simbol
+                        </label>
+                        <input type="number" id="symbolCount" min="1" max="20" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numberCount">
+                            <i class="fas fa-sort-numeric-up"></i> Jumlah Angka
+                        </label>
+                        <input type="number" id="numberCount" min="1" max="20" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lowercaseCount">
+                            <i class="fas fa-font"></i> Jumlah Huruf Kecil
+                        </label>
+                        <input type="number" id="lowercaseCount" min="1" max="20" value="4">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="uppercaseCount">
+                            <i class="fas fa-font"></i> Jumlah Huruf Besar
+                        </label>
+                        <input type="number" id="uppercaseCount" min="1" max="20" value="4">
+                    </div>
+                </div>
+
+                <button id="generateBtn" class="generate-btn">
+                    <i class="fas fa-magic"></i> Generate Password
+                </button>
+            </div>
+
+            <div class="glass-card results-card">
+                <h2><i class="fas fa-lock"></i> Hasil Password</h2>
+                <div id="passwordResults" class="password-results">
+                    <p class="placeholder">Klik "Generate Password" untuk membuat password</p>
+                </div>
+            </div>
+        </main>
+
+        <div class="background-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
