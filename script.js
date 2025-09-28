@@ -11,7 +11,7 @@ function debugLog(message) {
 
 // DOM Elements - akan diinisialisasi setelah DOM dimuat
 let passwordCountInput, maxLengthInput, symbolCountInput, numberCountInput, 
-    lowercaseCountInput, uppercaseCountInput, generateBtn, passwordResults;
+    lowercaseCountInput, uppercaseCountInput, generateBtn, passwordResults, errorContainer;
 
 // Function untuk menginisialisasi DOM Elements
 function initDOMElements() {
@@ -25,6 +25,7 @@ function initDOMElements() {
     uppercaseCountInput = document.getElementById('uppercaseCount');
     generateBtn = document.getElementById('generateBtn');
     passwordResults = document.getElementById('passwordResults');
+    errorContainer = document.getElementById('errorContainer');
     
     // Log hasil pencarian elemen
     debugLog(`passwordCountInput: ${passwordCountInput ? 'Ditemukan' : 'Tidak ditemukan'}`);
@@ -35,11 +36,12 @@ function initDOMElements() {
     debugLog(`uppercaseCountInput: ${uppercaseCountInput ? 'Ditemukan' : 'Tidak ditemukan'}`);
     debugLog(`generateBtn: ${generateBtn ? 'Ditemukan' : 'Tidak ditemukan'}`);
     debugLog(`passwordResults: ${passwordResults ? 'Ditemukan' : 'Tidak ditemukan'}`);
+    debugLog(`errorContainer: ${errorContainer ? 'Ditemukan' : 'Tidak ditemukan'}`);
     
     // Cek apakah semua elemen ditemukan
     if (!passwordCountInput || !maxLengthInput || !symbolCountInput || 
         !numberCountInput || !lowercaseCountInput || !uppercaseCountInput || 
-        !generateBtn || !passwordResults) {
+        !generateBtn || !passwordResults || !errorContainer) {
         console.error('Salah satu elemen DOM tidak ditemukan!');
         return false;
     }
@@ -52,22 +54,156 @@ function addEventListeners() {
     debugLog('Menambahkan event listeners...');
     
     if (generateBtn) {
-        generateBtn.addEventListener('click', generatePasswords);
+        generateBtn.addEventListener('click', validateAndGenerate);
         debugLog('Event listener untuk generateBtn berhasil ditambahkan');
     } else {
         console.error('generateBtn tidak ditemukan!');
     }
     
     // Add input validation
-    const inputs = [symbolCountInput, numberCountInput, lowercaseCountInput, uppercaseCountInput];
+    const inputs = [symbolCountInput, numberCountInput, lowercaseCountInput, uppercaseCountInput, maxLengthInput, passwordCountInput];
     inputs.forEach((input, index) => {
         if (input) {
-            input.addEventListener('input', validateInputs);
+            input.addEventListener('input', clearErrors);
             debugLog(`Event listener untuk input ${index} berhasil ditambahkan`);
         } else {
             console.error(`Input ${index} tidak ditemukan!`);
         }
     });
+}
+
+// Function untuk membersihkan pesan error
+function clearErrors() {
+    if (errorContainer) {
+        errorContainer.innerHTML = '';
+        errorContainer.classList.remove('show');
+    }
+}
+
+// Function untuk menampilkan pesan error
+function showError(message) {
+    if (!errorContainer) return;
+    
+    errorContainer.innerHTML = `
+        <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    errorContainer.classList.add('show');
+    debugLog(`Error ditampilkan: ${message}`);
+}
+
+// Function untuk validasi input sebelum generate
+function validateAndGenerate() {
+    debugLog('Validasi input sebelum generate...');
+    
+    clearErrors();
+    
+    if (!symbolCountInput || !numberCountInput || !lowercaseCountInput || 
+        !uppercaseCountInput || !maxLengthInput || !passwordCountInput) {
+        showError('Salah satu input tidak ditemukan!');
+        return;
+    }
+    
+    const symbolCount = symbolCountInput.value.trim();
+    const numberCount = numberCountInput.value.trim();
+    const lowercaseCount = lowercaseCountInput.value.trim();
+    const uppercaseCount = uppercaseCountInput.value.trim();
+    const maxLength = maxLengthInput.value.trim();
+    const passwordCount = passwordCountInput.value.trim();
+    
+    // Validasi input kosong
+    if (!symbolCount) {
+        showError('Jumlah simbol tidak boleh kosong!');
+        symbolCountInput.focus();
+        return;
+    }
+    
+    if (!numberCount) {
+        showError('Jumlah angka tidak boleh kosong!');
+        numberCountInput.focus();
+        return;
+    }
+    
+    if (!lowercaseCount) {
+        showError('Jumlah huruf kecil tidak boleh kosong!');
+        lowercaseCountInput.focus();
+        return;
+    }
+    
+    if (!uppercaseCount) {
+        showError('Jumlah huruf besar tidak boleh kosong!');
+        uppercaseCountInput.focus();
+        return;
+    }
+    
+    if (!maxLength) {
+        showError('Maksimal karakter tidak boleh kosong!');
+        maxLengthInput.focus();
+        return;
+    }
+    
+    if (!passwordCount) {
+        showError('Jumlah password tidak boleh kosong!');
+        passwordCountInput.focus();
+        return;
+    }
+    
+    // Validasi nilai numerik
+    const symbolNum = parseInt(symbolCount);
+    const numberNum = parseInt(numberCount);
+    const lowercaseNum = parseInt(lowercaseCount);
+    const uppercaseNum = parseInt(uppercaseCount);
+    const maxLengthNum = parseInt(maxLength);
+    const passwordCountNum = parseInt(passwordCount);
+    
+    if (isNaN(symbolNum) || symbolNum < 1) {
+        showError('Jumlah simbol harus berupa angka positif!');
+        symbolCountInput.focus();
+        return;
+    }
+    
+    if (isNaN(numberNum) || numberNum < 1) {
+        showError('Jumlah angka harus berupa angka positif!');
+        numberCountInput.focus();
+        return;
+    }
+    
+    if (isNaN(lowercaseNum) || lowercaseNum < 1) {
+        showError('Jumlah huruf kecil harus berupa angka positif!');
+        lowercaseCountInput.focus();
+        return;
+    }
+    
+    if (isNaN(uppercaseNum) || uppercaseNum < 1) {
+        showError('Jumlah huruf besar harus berupa angka positif!');
+        uppercaseCountInput.focus();
+        return;
+    }
+    
+    if (isNaN(maxLengthNum) || maxLengthNum < 4) {
+        showError('Maksimal karakter harus minimal 4!');
+        maxLengthInput.focus();
+        return;
+    }
+    
+    if (isNaN(passwordCountNum) || passwordCountNum < 1) {
+        showError('Jumlah password harus berupa angka positif!');
+        passwordCountInput.focus();
+        return;
+    }
+    
+    const totalChars = symbolNum + numberNum + lowercaseNum + uppercaseNum;
+    
+    if (totalChars > maxLengthNum) {
+        showError(`Total karakter (${totalChars}) melebihi maksimal karakter (${maxLengthNum})!`);
+        return;
+    }
+    
+    // Jika semua validasi berhasil, generate password
+    generatePasswords();
 }
 
 function validateInputs() {
